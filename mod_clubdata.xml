@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.3.0" client="site" method="upgrade">
+	<name>mod_clubdata</name>
+    <version>0.2.0</version>
+    <creationDate>January 2019</creationDate>
+	<author>Foeke Roukema</author>
+    <authorEmail>webmaster@bruseboys.nl</authorEmail>
+    <authorUrl>http://www.bruseboys.nl</authorUrl>
+    <copyright>Copyright (C) 2017-19 vv Bruse Boys. All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>MOD_CLUBDATA_DESCRIPTION</description>
+	<files>
+		<filename>mod_clubdata.xml</filename>
+		<filename module="mod_clubdata">mod_clubdata.php</filename>
+		<filename>helper.php</filename>
+		<filename>index.html</filename>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="nl-NL">nl-NL.mod_clubdata.ini</language>
+		<language tag="nl-NL">nl-NL.mod_clubdata.sys.ini</language>
+		<language tag="en-GB">en-GB.mod_clubdata.ini</language>
+		<language tag="en-GB">en-GB.mod_clubdata.sys.ini</language>
+	</languages>
+	<media destination="mod_clubdata" folder="media">
+		<filename>index.html</filename>
+		<folder>css</folder>
+	</media>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="displayoption"
+					type="list"
+					class="btn-group"
+					default="0"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_DISPLAYOPTION_LABEL"
+					description="MOD_CLUBDATA_FIELD_DISPLAYOPTION_DESC">
+					<!--  
+					<option value="0">MOD_CLUBDATA_FIELD_DISPLAYOPTION_TEAMRESULTS</option>
+					<option value="1">MOD_CLUBDATA_FIELD_DISPLAYOPTION_TEAMSCHEDULE</option>
+					<option value="2">MOD_CLUBDATA_FIELD_DISPLAYOPTION_TEAMRANKING</option>
+					<option value="3">MOD_CLUBDATA_FIELD_DISPLAYOPTION_MATCHDETAILS</option>
+					-->
+					<option value="4">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBSCHEDULE</option>
+					<option value="5">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBRESULTS</option>
+					<!--  
+					<option value="6">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUESCLUB</option>
+					<option value="7">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUERESULTS</option>
+					<option value="8">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUESCHEDULE</option>
+					<option value="9">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUERANKING</option>
+					<option value="10">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBTEAMS</option>
+					<option value="11">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBMIX</option>
+					-->
+				</field>
+				<field
+					name="introtext"
+					type="textarea"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_INTROTEXT_LABEL"
+					description="MOD_CLUBDATA_FIELD_INTROTEXT_DESC"
+					rows="3"
+					cols="80"
+				/>
+				<field
+					name="daycount"
+					type="integer"
+					default="7"
+					first="1"
+					last="100"
+					step="1"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_DAYCOUNT_LABEL"
+					description="MOD_CLUBDATA_FIELD_DAYCOUNT_DESC"
+					showon="displayoption:4,5"
+				/>
+				<field 
+					name="carouseloption" 
+					type="radio"
+					default="0"
+					class="btn-group"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_CAROUSEL_LABEL" 
+					description="MOD_CLUBDATA_FIELD_CAROUSEL_DESC" 
+					showon="displayoption:4">
+					<option value="0">MOD_CLUBDATA_FIELD_CAROUSELOPTION_NO</option>
+					<option value="1">MOD_CLUBDATA_FIELD_CAROUSELOPTION_YES</option>
+				</field>
+				<field 
+					name="useimgoption" 
+					type="radio"
+					default="0"
+					class="btn-group"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_USEIMG_LABEL" 
+					description="MOD_CLUBDATA_FIELD_USEIMG_DESC" 
+					showon="displayoption:4[AND]carouseloption:1">
+					<option value="0">MOD_CLUBDATA_FIELD_USEIMGOPTION_NONE</option>
+					<option value="1">MOD_CLUBDATA_FIELD_USEIMGOPTION_FROMTEAM</option>
+					<option value="2">MOD_CLUBDATA_FIELD_USEIMGOPTION_FROMFOLDER</option>
+					<option value="3">MOD_CLUBDATA_FIELD_USEIMGOPTION_FROMTEAMANDFOLDER</option>
+				</field>
+				<field 
+					name="imgfolder" 
+					type="folderlist" 
+					default="" 
+					label="MOD_CLUBDATA_FIELD_IMGFOLDER_LABEL" 
+					directory="images" 
+					showon="displayoption:4[AND]carouseloption:1[AND]useimgoption:2,3"
+					filter="" 
+					exclude="" 
+					stripext=""
+					recursive="true" 
+				/>			
+				<field 
+					name="showhomeawayoption" 
+					type="radio"
+					default="0"
+					class="btn-group"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_HOMEAWAY_LABEL" 
+					description="MOD_CLUBDATA_FIELD_HOMEAWAY_DESC" 
+					showon="displayoption:4">
+					<option value="0">MOD_CLUBDATA_FIELD_HOMEAWAY_BOTH</option>
+					<option value="1">MOD_CLUBDATA_FIELD_HOMEAWAY_HOMEONLY</option>
+					<option value="2">MOD_CLUBDATA_FIELD_HOMEAWAY_AWAYONLY</option>
+				</field>
+				<field 
+					name="linkownteamoption" 
+					type="radio"
+					default="0"
+					class="btn-group"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_LINKOWNTEAM_LABEL" 
+					description="MOD_CLUBDATA_FIELD_LINKOWNTEAM_DESC" 
+					showon="displayoption:4,5">
+					<option value="0">MOD_CLUBDATA_FIELD_LINKOWNTEAM_NO</option>
+					<option value="1">MOD_CLUBDATA_FIELD_LINKOWNTEAM_YES</option>
+				</field>
+				<field 
+					name="linkmenuitem" 
+					type="menuitem" 
+					label="MOD_CLUBDATA_FIELD_MENUITEM_LABEL" 
+					description="MOD_CLUBDATA_FIELD_MENUITEM_DESC" 
+				/>
+				<field
+					name="linkmenuitemtext"
+					type="textarea"
+					required="false"
+					label="MOD_CLUBDATA_FIELD_MENUITEMTEXT_LABEL"
+					description="MOD_CLUBDATA_FIELD_MENUITEMTEXT_DESC"
+					rows="3"
+					cols="80"
+				/>
+			</fieldset>
+			<fieldset
+				name="advanced">
+			</fieldset>
+		</fields>
+	</config>
+</extension>

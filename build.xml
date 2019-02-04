@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model xlink:href="./vendor/phing/phing/etc/phing-grammar.rng"
+            type="application/xml"
+            schematypens="http://relaxng.org/ns/structure/1.0" ?>
+<project name="mod_clubdata release creation" default="main" basedir=".">
+	<property name="srcdir_dev_base"			value="../../bruseboys36" override="true" />
+	<property name="srcdir_site"	  			value="${srcdir_dev_base}/modules/mod_clubdata" override="true" />
+	<property name="srcdir_sitelang_nl" 		value="${srcdir_dev_base}/language/nl-NL" override="true" />
+	<property name="srcdir_sitelang_en" 		value="${srcdir_dev_base}/language/en-GB" override="true" />
+	<property name="srcdir_media"  				value="${srcdir_dev_base}/media/mod_clubdata" override="true" />
+
+	<property name="destdir_modclubdata"		value="." override="true" />
+	<property name="destdir_site"				value="${destdir_modclubdata}" override="true" />
+	<property name="destdir_sitelang"			value="${destdir_site}/language" override="true" />
+	<property name="destdir_media"				value="${destdir_modclubdata}/media" override="true" />
+	<property name="destdir_output"				value="${destdir_modclubdata}/out" override="true" />
+
+	<xmlproperty file="${srcdir_site}/mod_clubdata.xml"/>
+    <php function="str_replace" returnProperty="extensionversion">
+		<param value="." />
+    	<param value="_" />
+    	<param value="${extension.version}" />
+	</php>
+	
+    <!-- Fileset for dev/site files -->
+    <fileset dir="${srcdir_site}" id="sitefiles">
+        <include name="**" />
+    </fileset>
+
+    <!-- Fileset for dev/site/language files -->
+    <fileset dir="${srcdir_sitelang_nl}" id="sitelangfiles_nl">
+        <include name="*.mod_clubdata.ini" />
+        <include name="*.mod_clubdata.sys.ini" />
+	</fileset>
+    <fileset dir="${srcdir_sitelang_en}" id="sitelangfiles_en">
+        <include name="*.mod_clubdata.ini" />
+        <include name="*.mod_clubdata.sys.ini" />
+	</fileset>
+
+    <!-- Fileset for dev/media files -->
+    <fileset dir="${srcdir_media}" id="mediafiles">
+        <include name="**" />
+    </fileset>
+
+    <fileset dir="${destdir_modclubdata}" id="mainfiles">
+		<include name="**" />
+        <exclude name="build*.xml" />
+       	<exclude name="*.zip"/>		    	
+       	<exclude name=".*/**"/>		    	
+       	<exclude name="src/**"/>		    	
+       	<exclude name="out/**"/>		    	
+    </fileset>
+	
+    <!-- ============================================  -->
+    <!-- Copy files to target                          -->
+    <!-- ============================================  -->
+    <target name="copy" description="Creates mod_clubdata release package">
+		<echo message="Running build.xml. Copying files from dev to release package..." />
+    	<copy todir="${destdir_site}">
+            <fileset refid="sitefiles" />
+        </copy>
+    	<copy todir="${destdir_sitelang}">
+            <fileset refid="sitelangfiles_nl" />
+        </copy>
+    	<copy todir="${destdir_sitelang}">
+            <fileset refid="sitelangfiles_en" />
+        </copy>
+    	<copy todir="${destdir_media}">
+            <fileset refid="mediafiles" />
+        </copy>
+     </target>
+    	
+	<!-- ============================================  -->
+    <!-- Zip installation file                         -->
+    <!-- ============================================  -->
+	<target name="archive" description="Create zipfile" depends="copy">
+		<echo message="Creating installation zipfile..." />
+		<delete file="${destdir_output}/mod_clubdata_v${extensionversion}.zip" />
+    	<zip destfile="${destdir_output}/mod_clubdata_v${extensionversion}.zip">
+            <fileset refid="mainfiles" />
+		</zip>
+    </target>
+
+	<!-- ============================================  -->
+    <!-- Main					                       -->
+    <!-- ============================================  -->
+	<target name="main" description="main script" depends="archive"></target>
+	
+</project>
