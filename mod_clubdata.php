@@ -36,7 +36,6 @@ switch ($params->get('displayoption', 0)) {
         try {
             $scheduledmatches = ModClubDataHelper::getScheduledMatches($daycount, $showhomeaway==0 || $showhomeaway==1, $showhomeaway==0 || $showhomeaway==2);
         } catch (Exception $e) {
-            // when exception occurs, prevent that complete page is not displaying
             JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
             $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
         }
@@ -56,7 +55,6 @@ switch ($params->get('displayoption', 0)) {
 	    try {
 	        $playedmatches = ModClubDataHelper::getMatchResults($daycount);
 	    } catch (Exception $e) {
-	        // when exception occurs, prevent that complete page is not displaying
 	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
 	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
 	    }
@@ -66,7 +64,6 @@ switch ($params->get('displayoption', 0)) {
 	    try {
 	        $teams = ModClubDataHelper::getTeams();
 	    } catch (Exception $e) {
-	        // when exception occurs, prevent that complete page is not displaying
 	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
 	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
 	    }
@@ -77,7 +74,6 @@ switch ($params->get('displayoption', 0)) {
 	        $scheduledmatches = ModClubDataHelper::getScheduledMatches();
     	    $playedmatches = ModClubDataHelper::getMatchResults();
 	    } catch (Exception $e) {
-	        // when exception occurs, prevent that complete page is not displaying
 	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
 	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
 	    }
