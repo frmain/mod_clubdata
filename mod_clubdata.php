@@ -28,55 +28,57 @@ $menulinktext = $params->get('linkmenuitemtext', '');
 $menulinkurl = JRoute::_('index.php?Itemid=' . $menuitemid);
 
 $club = ModClubDataHelper::getClub();
+$clubs = ModClubDataHelper::getClubs();
+$clubcodes = ModClubDataHelper::getClubcodes();
 
 switch ($params->get('displayoption', 0)) {
-    case 3:
-        break;
-    case 4:
-        try {
-            $scheduledmatches = ModClubDataHelper::getScheduledMatches($daycount, $showhomeaway==0 || $showhomeaway==1, $showhomeaway==0 || $showhomeaway==2);
-        } catch (Exception $e) {
-            JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
-            $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
-        }
-	    if ($params->get('carouseloption', 0)) {
-	        if ($useimg == 1 || $useimg == 3) { // use team image from Sportlink
-	            $teams = ModClubDataHelper::getTeams();
-	        } 
-	        if ($useimg == 2 || $useimg == 3) { // use image from folder
-	            $dirimages = ModClubDataHelper::getImageFiles($dir);
-	        }
-	        require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubschedulecarousel'));
-	    } else {
-	        require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubschedule'));
-        }
-	    break;
+	case 3:
+		break;
+	case 4:
+		try {
+			$scheduledmatches = ModClubDataHelper::getScheduledMatches($daycount, $showhomeaway==0 || $showhomeaway==1, $showhomeaway==0 || $showhomeaway==2);
+		} catch (Exception $e) {
+			JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
+			$warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
+		}
+		if ($params->get('carouseloption', 0)) {
+			if ($useimg == 1 || $useimg == 3) { // use team image from Sportlink
+				$teams = ModClubDataHelper::getTeams();
+			} 
+			if ($useimg == 2 || $useimg == 3) { // use image from folder
+				$dirimages = ModClubDataHelper::getImageFiles($dir);
+			}
+			require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubschedulecarousel'));
+		} else {
+			require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubschedule'));
+		}
+		break;
 	case 5:
-	    try {
-	        $playedmatches = ModClubDataHelper::getMatchResults($daycount);
-	    } catch (Exception $e) {
-	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
-	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
-	    }
-	    require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubresults'));
-	    break;
+		try {
+			$playedmatches = ModClubDataHelper::getMatchResults($daycount);
+		} catch (Exception $e) {
+			JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
+			$warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
+		}
+		require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubresults'));
+		break;
 	case 10:
-	    try {
-	        $teams = ModClubDataHelper::getTeams();
-	    } catch (Exception $e) {
-	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
-	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
-	    }
-	    require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubteams'));
-	    break;
+		try {
+			$teams = ModClubDataHelper::getTeams();
+		} catch (Exception $e) {
+			JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
+			$warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
+		}
+		require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubteams'));
+		break;
 	case 11: //clubmix
-	    try {
-	        $scheduledmatches = ModClubDataHelper::getScheduledMatches();
-    	    $playedmatches = ModClubDataHelper::getMatchResults();
-	    } catch (Exception $e) {
-	        JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
-	        $warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
-	    }
-	    require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubmix'));
-	    break;
+		try {
+			$scheduledmatches = ModClubDataHelper::getScheduledMatches();
+			$playedmatches = ModClubDataHelper::getMatchResults();
+		} catch (Exception $e) {
+			JLog::add($e->getMessage(), JLog::ERROR, 'mod_clubdata');
+			$warning = JText::sprintf("MOD_CLUBDATA_SPORTLINK_DATA_ERROR",$e->getMessage());
+		}
+		require JModuleHelper::getLayoutPath('mod_clubdata', $params->get('layout', 'clubmix'));
+		break;
 }
