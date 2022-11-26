@@ -51,14 +51,14 @@ if (!empty($warning)) { ?>
 					<div class="m-clubdata-match-title"> 
 						<span class="m-clubdata-match-home <?php if (in_array($match->thuisteamclubrelatiecode, $clubcodes)) echo 'm-clubdata-favourite'; ?>">
 							<?php $clubindex = array_search($match->thuisteamclubrelatiecode, $clubcodes);
-								if ($linkownteams && $clubindex) { ?>
+							if ($linkownteams && $clubindex !== false) { ?>
 								<a href="<?php echo JRoute::_('index.php?option=com_clubdata&view=team&clubindex='.$clubindex.'&teamcode=' . $match->thuisteamid); ?>"><?php echo $match->thuisteam; ?></a>
 							<?php } else { echo $match->thuisteam; }?>
 						</span>
 						<span><?php echo JText::_('MOD_CLUBDATA_TEAMSEPARATOR') ?></span>
 						<span class="m-clubdata-match-away <?php if (in_array($match->uitteamclubrelatiecode, $clubcodes)) echo 'm-clubdata-favourite'; ?>">
 							<?php $clubindex = array_search($match->uitteamclubrelatiecode, $clubcodes);
-								if ($linkownteams && $clubindex) { ?>
+								if ($linkownteams && $clubindex !== false) { ?>
 								<a href="<?php echo JRoute::_('index.php?option=com_clubdata&view=team&clubindex='.$clubindex.'&teamcode=' . $match->uitteamid); ?>"><?php echo $match->uitteam; ?></a>
 							<?php } else { echo $match->uitteam; }?>
 						</span>

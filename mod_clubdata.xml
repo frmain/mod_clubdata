@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="3.3.0" client="site" method="upgrade">
 	<name>mod_clubdata</name>
-    <version>0.2.0</version>
-    <creationDate>January 2019</creationDate>
+	<version>0.2.1</version>
+	<creationDate>2022-10-28</creationDate>
 	<author>Foeke Roukema</author>
-    <authorEmail>webmaster@bruseboys.nl</authorEmail>
-    <authorUrl>http://www.bruseboys.nl</authorUrl>
-    <copyright>Copyright (C) 2017-19 vv Bruse Boys. All rights reserved.</copyright>
-    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>webmaster@bruseboys.nl</authorEmail>
+	<authorUrl>http://www.bruseboys.nl</authorUrl>
+	<copyright>Copyright (C) 2017-2022 vv Bruse Boys. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<description>MOD_CLUBDATA_DESCRIPTION</description>
 	<files>
 		<filename>mod_clubdata.xml</filename>
@@ -28,7 +28,9 @@
 	</media>
 	
 	<config>
-		<fields name="params">
+		<fields name="params"
+						addfieldpath="/administrator/components/com_clubdata/models/fields"
+		>
 			<fieldset name="basic">
 				<field
 					name="displayoption"
@@ -51,8 +53,11 @@
 					<option value="7">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUERESULTS</option>
 					<option value="8">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUESCHEDULE</option>
 					<option value="9">MOD_CLUBDATA_FIELD_DISPLAYOPTION_LEAGUERANKING</option>
+					-->
 					<option value="10">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBTEAMS</option>
 					<option value="11">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBMIX</option>
+					<!--
+					<option value="12">MOD_CLUBDATA_FIELD_DISPLAYOPTION_CLUBCANCELLATIONS</option>
 					-->
 				</field>
 				<field
@@ -74,8 +79,24 @@
 					required="false"
 					label="MOD_CLUBDATA_FIELD_DAYCOUNT_LABEL"
 					description="MOD_CLUBDATA_FIELD_DAYCOUNT_DESC"
-					showon="displayoption:4,5"
+					showon="displayoption:4,5,11"
 				/>
+				<field 
+					name="tabshow"
+					type="checkboxes"
+					label="MOD_CLUBDATA_FIELD_TABSHOW_LABEL"
+					description="MOD_CLUBDATA_FIELD_TABSHOW_DESC"
+					required="false"
+					default=""
+					checked="focus,schedule,results"
+					showon="displayoption:11"
+					multiple="true"
+				>
+					<option value="focus">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_FOCUS</option>
+					<option value="schedule">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_SCHEDULE</option>
+					<option value="results">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_RESULTS</option>
+					<option value="cancellations">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_CANCELLATIONS</option>
+				</field>
 				<field 
 					name="carouseloption" 
 					type="radio"
@@ -96,7 +117,7 @@
 					required="false"
 					label="MOD_CLUBDATA_FIELD_USEIMG_LABEL" 
 					description="MOD_CLUBDATA_FIELD_USEIMG_DESC" 
-					showon="displayoption:4[AND]carouseloption:1">
+					showon="displayoption:4[AND]carouseloption:1[OR]displayoption:11[AND]tabshow:focus">
 					<option value="0">MOD_CLUBDATA_FIELD_USEIMGOPTION_NONE</option>
 					<option value="1">MOD_CLUBDATA_FIELD_USEIMGOPTION_FROMTEAM</option>
 					<option value="2">MOD_CLUBDATA_FIELD_USEIMGOPTION_FROMFOLDER</option>
@@ -108,12 +129,12 @@
 					default="" 
 					label="MOD_CLUBDATA_FIELD_IMGFOLDER_LABEL" 
 					directory="images" 
-					showon="displayoption:4[AND]carouseloption:1[AND]useimgoption:2,3"
+					showon="displayoption:4[AND]carouseloption:1[OR]displayoption:11[AND]tabshow:focus[AND]useimgoption:2,3"
 					filter="" 
 					exclude="" 
 					stripext=""
 					recursive="true" 
-				/>			
+				/>
 				<field 
 					name="showhomeawayoption" 
 					type="radio"
@@ -122,7 +143,7 @@
 					required="false"
 					label="MOD_CLUBDATA_FIELD_HOMEAWAY_LABEL" 
 					description="MOD_CLUBDATA_FIELD_HOMEAWAY_DESC" 
-					showon="displayoption:4">
+					showon="displayoption:4[OR]displayoption:11[AND]tabshow:focus">
 					<option value="0">MOD_CLUBDATA_FIELD_HOMEAWAY_BOTH</option>
 					<option value="1">MOD_CLUBDATA_FIELD_HOMEAWAY_HOMEONLY</option>
 					<option value="2">MOD_CLUBDATA_FIELD_HOMEAWAY_AWAYONLY</option>
@@ -135,9 +156,37 @@
 					required="false"
 					label="MOD_CLUBDATA_FIELD_LINKOWNTEAM_LABEL" 
 					description="MOD_CLUBDATA_FIELD_LINKOWNTEAM_DESC" 
-					showon="displayoption:4,5">
+					showon="displayoption:4,5,11">
 					<option value="0">MOD_CLUBDATA_FIELD_LINKOWNTEAM_NO</option>
 					<option value="1">MOD_CLUBDATA_FIELD_LINKOWNTEAM_YES</option>
+				</field>
+				<field
+					name="focusedteamcodes"
+					type="ClubDataTeamlist"
+					label="MOD_CLUBDATA_FIELD_FOCUSEDTEAMS_LABEL"
+					description="MOD_CLUBDATA_FIELD_FOCUSEDTEAMS_DESC"
+					required="false"
+					default=""
+					showon="displayoption:11"
+					class="inputbox"
+					size="5"
+					multiple="true"
+				/>
+				<field 
+					name="tabshow"
+					type="checkboxes"
+					label="MOD_CLUBDATA_FIELD_TABSHOW_LABEL"
+					description="MOD_CLUBDATA_FIELD_TABSHOW_DESC"
+					required="false"
+					default=""
+					checked="0,1,2"
+					showon="displayoption:11"
+					multiple="true"
+				>
+					<option value="focus">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_FOCUS</option>
+					<option value="schedule">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_SCHEDULE</option>
+					<option value="results">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_RESULTS</option>
+					<option value="cancellations">MOD_CLUBDATA_FIELD_TABSHOW_OPTION_CANCELLATIONS</option>
 				</field>
 				<field 
 					name="linkmenuitem" 

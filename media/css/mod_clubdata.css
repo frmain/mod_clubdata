@@ -6,7 +6,7 @@
  */
 
 .m-clubdata-nodata{
-  text-align: center;
+	text-align: center;
 }
 
 .m-clubdata-message{
@@ -35,8 +35,8 @@
 }
 
 .m-clubdata-clubschedule .popover {
-    max-width: 600px;
-    width: auto;
+	max-width: 600px;
+	width: auto;
 }
 
 .m-clubdata-clubresults {
@@ -108,34 +108,40 @@
 .m-clubdata-favourite {
 	color: purple;
 }
-.m-clubdata-carousel .m-clubdata-favourite {
-	color: white;
-}
 
 .m-clubdata-carousel a {
 	color: white;
 }
 .m-clubdata-carousel a:hover {
+	color: white;
 	text-decoration: underline;
+}
+
+.m-clubdata-carousel .m-clubdata-favourite a {
+	color: #bce4fb;
+	font-weight: bold;
 }
 
 
 
 
 .m-clubdata-clubschedule .popover {
-    max-width: 600px;
-    width: auto;
+	max-width: 600px;
+	width: auto;
 }
 
 .m-clubdata-car-match {
 	text-align: center;
 	color: white;
 	font-weight: bold; 
-	min-height: 280px;
+	min-height: 250px;
 	background-position: center;
-    background-repeat: no-repeat;
+	background-repeat: no-repeat;
 	background-image:  radial-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ); 
 	border-radius: 20px;
+	background-color: #762a8c;
+	background-blend-mode: soft-light;
+	background-size: cover;
 }
 
 #schedulecarousel .carousel-control.right {
@@ -162,7 +168,7 @@
 }
 
 .m-clubdata-car-match-title {
-	
+	font-size: 22px;
 }
 
 #schedulecarousel .m-clubdata-introtext {

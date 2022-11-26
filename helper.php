@@ -42,7 +42,7 @@ class ModClubDataHelper
 	/**
 	 * Get the clubcodes (of all clubs belonging to main club)
 	 *
-	 * @return array  clubcodes
+	 * @return array string clubcodes
 	 */
 	public static function getClubcodes() {
 		$clubcodes = array();
@@ -55,9 +55,9 @@ class ModClubDataHelper
 	
 	
 	/**
-	 * Get the scheduled club matches for the next 8 days
+	 * Get the scheduled club matches for the next x days
 	 * 
-	 * @return SportlinkClubData\Match[]  List of Match objects
+	 * @return SportlinkClubData\ClubMatch[]  List of Match objects
 	 */
 	public static function getScheduledMatches($daycount=null, $home=true, $away=true) {
  
@@ -68,12 +68,39 @@ class ModClubDataHelper
 	/**
 	 * Get the club match results of the last week
 	 *
-	 * @return SportlinkClubData\Match[]  List of Match objects
+	 * @return SportlinkClubData\ClubMatch[]  List of Match objects
 	 */
 	public static function getMatchResults($daycount=null) {
 		
 		$clubmodel = JModelLegacy::getInstance('Club', 'ClubDataModel');
 		return $clubmodel->getClubResults($daycount);
+	}
+	
+	/**
+	 * Filter the scheduled club matches for the ones who need more focus
+	 *
+	 * @return SportlinkClubData\ClubMatch[]  List of Match objects
+	 */
+	public static function filterFocusedMatches($scheduledmatches, $focusedteams=null, $home=true, $away=true) {
+		
+		$focusedmatches = array();
+		foreach ($scheduledmatches as $match) {
+			if ( ( ($home && $match->isHomeMatch()) || ($away && $match->isAwayMatch()) ) && 
+			(empty($focusedteams) || in_array($match->thuisteamid, $focusedteams) || in_array($match->uitteamid, $focusedteams))) {
+				$focusedmatches[$match->wedstrijdcode] = $match;
+			}
+		}
+		// sort on order of focused teams
+		if (!empty($focusedteams)) {
+			uasort($focusedmatches, 
+				function($match1, $match2) use ($focusedteams) {
+					if (in_array($match1->thuisteamid, $focusedteams)) $ownteamid1 = $match1->thuisteamid; else $ownteamid1 = $match1->uitteamid;
+					if (in_array($match2->thuisteamid, $focusedteams)) $ownteamid2 = $match2->thuisteamid; else $ownteamid2 = $match2->uitteamid;
+					return ((array_search($ownteamid1, $focusedteams) > array_search($ownteamid2, $focusedteams)) ? 1 : -1);
+				}
+			);
+		}
+		return $focusedmatches;
 	}
 	
 	/**
@@ -111,5 +138,33 @@ class ModClubDataHelper
 		$images=preg_grep('/\.(jpg|jpeg|png|gif)(?:[\?\#].*)?$/i', $dirfiles);
 		return $images;
 	}
+
+	/**
+	 * Select randomly an image from an array with image file names
+	 *
+	 * @param array $imagearray array with image file names
+	 *
+	 * @return string filename referring to an image file
+	 */
+	public static function randomImage($imagearray) {
+		if (empty($imagearray))
+			return null;
+			else
+				return $imagearray[array_rand($imagearray)];
+	}
+	
+	/**
+	 * Checks whether a string starts with a certain substring (only needed when php < v8)
+	 *
+	 * @param string $haystack string to search in
+	 * @param string $needle string to search for
+	 *
+	 * @return bool true when found at beginning of haystack
+	 */
+	public static function startsWith( $haystack, $needle ) {
+		$length = strlen( $needle );
+		return substr( $haystack, 0, $length ) === $needle;
+	}
+
 
 }
